@@ -2,10 +2,10 @@ version: 0.2
 
 env:
   #variables:
-  #  IMAGE_REPO_NAME: myapp
-  #  AWS_REGION: ap-southeast-2
+    IMAGE_REPO_NAME: demoproject
+    AWS_REGION: ap-southeast-2
   #  compute_type: BUILD_GENERAL1_MEDIUM
-  #privileged: true # Required for Docker build/push
+  privileged: true # Required for Docker build/push
   #shell: bash
 
 phases:
