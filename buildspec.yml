@@ -15,7 +15,7 @@ phases:
       - echo logging into Amazon ECR...
       - aws --version
       #- ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-      - ECR_URI="781964126677.dkr.ecr.$AWS_REGION.amazonaws.com"
+      - ECR_URI="781964126677.dkr.ecr.ap-southeast-2.amazonaws.com/demoproject"
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_URI
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
