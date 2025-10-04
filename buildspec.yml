@@ -1,12 +1,12 @@
 version: 0.2
 
 env:
-  variables:
-    IMAGE_REPO_NAME: myapp
-    AWS_REGION: ap-southeast-2
-    compute_type: BUILD_GENERAL1_MEDIUM
-  privileged: true # Required for Docker build/push
-  shell: bash
+  #variables:
+  #  IMAGE_REPO_NAME: myapp
+  #  AWS_REGION: ap-southeast-2
+  #  compute_type: BUILD_GENERAL1_MEDIUM
+  #privileged: true # Required for Docker build/push
+  #shell: bash
 
 phases:
   prebuild:
@@ -14,8 +14,8 @@ phases:
       - echo Pre-Build phase started on `date`
       - echo logging into Amazon ECR...
       - aws --version
-      - ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-      - ECR_URI="$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
+      #- ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+      - ECR_URI="781964126677.dkr.ecr.$AWS_REGION.amazonaws.com"
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_URI
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
