@@ -4,36 +4,22 @@
 - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_URI
 ```
 
-[GitHub Repo]
-|
-v (merge / commit triggers)
-[CodePipeline / CodeBuild]
-|
-v
-+----------------------------+
-| CodeBuild Container |
-|----------------------------|
-| 1️⃣ aws ecr get-login-password --region $AWS_REGION
-|       -> AWS ECR returns temporary auth token
-|
-|  2️⃣ docker login --username AWS --password-stdin $ECR_URI
-|       -> Docker uses token to authenticate to ECR
-|
-|  3️⃣ docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-| -> Build Docker image locally in container
-|
-| 4️⃣ docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $ECR_URI/$IMAGE_REPO_NAME:$IMAGE_TAG
-|       -> Tag image for ECR
-|
-|  5️⃣ docker push $ECR_URI/$IMAGE_REPO_NAME:$IMAGE_TAG
-| -> Push image to ECR repository
-+----------------------------+
-|
-v
-[Amazon ECR]
-|
-v
-[ECS / Other Deployment Targets]
+```
+flowchart TD
+    A[GitHub Repo] -->|Merge / Commit| B[CodePipeline / CodeBuild]
+    B --> C[CodeBuild Container]
+
+    subgraph "CodeBuild Steps"
+        C1[1️⃣ aws ecr get-login-password --region $AWS_REGION] --> C2[2️⃣ docker login --username AWS --password-stdin $ECR_URI]
+        C2 --> C3[3️⃣ docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .]
+        C3 --> C4[4️⃣ docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $ECR_URI/$IMAGE_REPO_NAME:$IMAGE_TAG]
+        C4 --> C5[5️⃣ docker push $ECR_URI/$IMAGE_REPO_NAME:$IMAGE_TAG]
+    end
+
+    C --> C1
+    C5 --> D[Amazon ECR]
+    D --> E[ECS / Lambda / Other Deployment Targets]
+```
 
 - get-login-password → temporary token (expires in 12 hours)
 - docker login → authenticates Docker using that token
