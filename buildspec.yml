@@ -21,7 +21,7 @@ phases:
     commands:
       - echo "Building Docker image..."
       - docker build -t $ECR_URI:latest .
-      - docker tag $ECR_URI:$latest $ECR_URI:$IMAGE_TAG
+      - docker tag $ECR_URI:latest $ECR_URI:$IMAGE_TAG
 
   post_build:
     commands:
