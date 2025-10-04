@@ -20,15 +20,15 @@ phases:
   build:
     commands:
       - echo "Building Docker image..."
-      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $ECR_URI/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker build -t $ECR_URI:latest .
+      - docker tag $ECR_URI:$latest $ECR_URI:$IMAGE_TAG
 
   post_build:
     commands:
       - echo "Pushing image to ECR..."
-      - docker push $ECR_URI/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker push $ECR_URI:latest
       - echo "Writing image definitions..."
-      - printf '[{"name":"%s","imageUri":"%s"}]' "$IMAGE_REPO_NAME" "$ECR_URI/$IMAGE_REPO_NAME:$IMAGE_TAG" > imagedefinitions.json
+      - printf '[{"name":"%s","imageUri":"%s"}]' "$IMAGE_REPO_NAME" "$ECR_URI:$IMAGE_TAG" > imagedefinitions.json
 
 artifacts:
   files:
